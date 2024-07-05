@@ -1,26 +1,26 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Head from "next/head";
 import Typed from "typed.js";
 import Link from "next/link";
 
 const Home = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
+  
   const skillsData = [
     { name: "Web Design", progress: 85, color: "#CA56F2" },
     { name: "UX/UI Design", progress: 80, color: "#9272D4" },
     { name: "Database", progress: 90, color: "#5185D4" },
     { name: "Ms office", progress: 80, color: "#9272D4" },
-    { name: "Java,Spring", progress: 70, color: " #FF6464" },
+    { name: "Java,Spring", progress: 70, color: "#FF6464" },
     { name: "Version Control Git", progress: 80, color: "#9272D4" },
   ];
 
   useEffect(() => {
-    const bodyClassList = document.body.classList;
-    if (bodyClassList.contains("dark")) {
-      setIsDarkMode(true);
+    if (isDarkMode) {
+      document.body.classList.add("dark");
     } else {
-      setIsDarkMode(false);
+      document.body.classList.remove("dark");
     }
 
     const options = {
@@ -34,67 +34,66 @@ const Home = () => {
 
     const typed = new Typed(".typing", options);
 
-    // Cleanup Typed.js instance on unmount
     return () => {
       typed.destroy();
     };
-  }, []);
+  }, [isDarkMode]);
 
   const toggleDarkMode = () => {
-    document.body.classList.toggle("dark");
     setIsDarkMode(!isDarkMode);
   };
 
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   return (
-    <div>
-      <div className="w-full h-full bg-gray-900 dark:bg-gray-200">
-        <header className="lg:px-16 px-4 flex flex-wrap items-center py-4 shadow-lg dark:bg-gray-200 sticky top-0">
+    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+      <header className={`fixed top-0 left-0 w-full z-50 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'} shadow-lg`}>
+        <div className="lg:px-16 px-4 flex flex-wrap items-center py-4">
           <div className="flex-1 flex justify-between items-center">
             <img className="sm:w-[10rem] xs:w-[7rem]" src="logo.png" alt="Logo" />
           </div>
-          <label htmlFor="menu-toggle" className="pointer-cursor md:hidden block">
-            <svg className="fill-current text-gray-200" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+          <button className="pointer-cursor md:hidden block" onClick={toggleMenu}>
+            <svg className="fill-current" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
               <title>menu</title>
               <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
             </svg>
-          </label>
-          <input className="hidden" type="checkbox" id="menu-toggle" />
-          <div className="hidden md:flex md:items-center md:w-auto" id="menu">
-            <nav>
-              <ul className="md:flex items-center justify-between text-base text-gray-100 dark:text-gray-600 pt-4 md:pt-0">
-                <li>
-                  <a className="md:p-4 py-3 px-0 block text-rose-500" href="#">
-                    Home
-                  </a>
-                </li>
-                <li>
-                  <a className="md:p-4 py-3 px-0 block" href="#aboutme">
-                    About Me
-                  </a>
-                </li>
-                <li>
-                  <a className="md:p-4 py-3 px-0 block" href="#education">
-                    Education
-                  </a>
-                </li>
-                <li>
-                  <a className="md:p-4 py-3 px-0 block" href="#skill">
-                    Skill
-                  </a>
-                </li>
-                <li>
-                  <a className="md:p-4 py-3 px-0 block" href="#project">
-                    Projects
-                  </a>
-                </li>
-                <li>
-                  <a className="md:p-4 py-3 px-0 block md:mb-0 mb-2" href="#contact">
-                    Contact
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
+          </button>
+          <nav className={`md:flex md:items-center md:w-auto w-full ${menuOpen ? 'block' : 'hidden'}`}>
+            <ul className="md:flex items-center justify-between text-base pt-4 md:pt-0">
+              <li>
+                <a className="md:p-4 py-3 px-0 block text-rose-500" href="#">
+                  Home
+                </a>
+              </li>
+              <li>
+                <a className="md:p-4 py-3 px-0 block" href="#aboutme">
+                  About Me
+                </a>
+              </li>
+              <li>
+                <a className="md:p-4 py-3 px-0 block" href="#education">
+                  Education
+                </a>
+              </li>
+              <li>
+                <a className="md:p-4 py-3 px-0 block" href="#skill">
+                  Skill
+                </a>
+              </li>
+              <li>
+                <a className="md:p-4 py-3 px-0 block" href="#project">
+                  Projects
+                </a>
+              </li>
+              <li>
+                <a className="md:p-4 py-3 px-0 block md:mb-0 mb-2" href="#contact">
+                  Contact
+                </a>
+              </li>
+            </ul>
+          </nav>
           <button onClick={toggleDarkMode} className="ml-auto h-12 w-12 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
             <svg className={`fill-current ${isDarkMode ? "hidden" : "block"} text-violet-700`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
               <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
@@ -103,21 +102,23 @@ const Home = () => {
               <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fillRule="evenodd" clipRule="evenodd"></path>
             </svg>
           </button>
-        </header>
+        </div>
+      </header>
 
-        <div className="h-screen w-full  mx-auto xl:px-16 xs:px-8 flex md:flex-row xs:flex-col gap-4 justify-center items-center pb-10 pt-4">
+      <div className="pt-24">
+        <div className="h-screen w-full mx-auto xl:px-16 xs:px-8 flex flex-col md:flex-row gap-4 justify-center items-center pb-10 pt-4">
           <div>
             <img className="rounded-lg min-w-[100px] w-full h-auto md:w-auto md:h-auto transition-transform duration-300 ease-in-out transform hover:scale-90 scale-75" src="/girl.png" alt="img of myself" />
           </div>
-          <div className="w-full flex flex-col justify-center gap-4 text-white dark:text-gray-800 md:mt-0 sm:mt-8 xs:mt-4">
-            <h1 className="text-4xl font-semibold font-serif ">Hello, I'm Kosal Sreyka</h1>
+          <div className="w-full flex flex-col justify-center gap-4 text-center md:text-left">
+            <h1 className="text-4xl font-semibold font-serif">Hello, I'm Kosal Sreyka</h1>
             <h3 className="capitalize text-rose-400">
               I'm <span className="typing text-green-500 dark:text-green-700"></span>
             </h3>
             <p className="mt-4">
               I am currently seeking opportunities to gain professional experience in the tech industry. I have worked on various personal and academic projects using technologies such as Java, Spring, React.js, Next.js, Web Design, SQL, PHP, and MySQL. I am eager to apply my skills in a professional setting and contribute to meaningful projects.
             </p>
-            <div className="sm:mt-4 xs:mt-2">
+            <div className="mt-4">
               <button className="px-6 py-2 bg-rose-500 text-white hover:bg-rose-600 rounded-md transition-all ease-in-out duration-300">
                 Contact
               </button>
@@ -127,26 +128,26 @@ const Home = () => {
       </div>
 
       {/* About Me Section */}
-      <div className="relative mt-52  text-center">
+      <div className="relative mt-24 mb-24 text-center">
         <p className="text-5xl inline-block relative group">
           About Me
           <span className="absolute left-0 h-1 bg-violet-700 w-0 group-hover:w-full transition-all duration-500 -bottom-2"></span>
         </p>
       </div>
-      <section className="pt-10 overflow-hidden md:pt-0 text-black  sm:pt-16 2xl:pt-16" id="aboutme">
-        <div className="px-4 mx-auto sm:px-6 shadow-lg lg:px-8 max-w-5xl rounded-xl bg-gray-50 ">
-          <div className="grid items-center grid-cols-1 md:grid-cols-2 ">
+      <section className="pt-10 overflow-hidden md:pt-0 text-black dark:text-white sm:pt-16 2xl:pt-16" id="aboutme">
+        <div className="px-4 mx-auto sm:px-6 shadow-lg lg:px-8 max-w-5xl rounded-xl bg-gray-50 dark:bg-gray-800">
+          <div className="grid items-center grid-cols-1 md:grid-cols-2">
             <div>
-              <h2 className="text-xl font-bold leading-tight  text-black sm:text-4xl lg:text-5xl">
+              <h2 className="text-3xl font-bold leading-tight text-black dark:text-white sm:text-4xl lg:text-5xl">
                 Hello 👋 I am <br className="block sm:hidden" /> Sreyka
               </h2>
-              <p className="max-w-lg mt-3 text-lg leading-relaxed text-gray-600 dark:text-gray-300 md:mt-8">
+              <p className="max-w-lg mt-3 text-xl leading-relaxed text-gray-600 dark:text-gray-300 md:mt-8">
                 I recently graduated from the Royal University of Phnom Penh with a bachelor’s degree in computer science. I am currently seeking opportunities to gain professional experience in the tech industry. I have worked on various personal and academic projects using technologies such as Java, Spring, React.js, Next.js, Web Design, SQL, PHP, and MySQL. I am eager to apply my skills in a professional setting and contribute to meaningful projects. I am excited to start my career and look forward to discussing this exciting opportunity.
               </p>
             </div>
             <div className="relative">
               <div className="mr-10">
-                <img className="rounded-lg min-w-[100px] w-full h-auto md:w-auto md:h-auto transition-transform duration-300 ease-in-out transform hover:scale-75 scale-50" src="/mypic.jpg" alt="img of myself" />
+                <img className="rounded-lg min-w-[100px] w-full h-auto md:w-auto md:h-auto transition-transform duration-300 ease-in-out transform hover:scale-90 scale-75" src="/mypic.jpg" alt="img of myself" />
               </div>
             </div>
           </div>
@@ -155,21 +156,21 @@ const Home = () => {
 
       {/* Education Section */}
       <div id="education" className="mt-24">
-        <div className="min-h-screen flex flex-col p-8 sm:p-16 md:p-24 justify-center bg-white">
+        <div className="min-h-screen flex flex-col p-8 sm:p-16 md:p-24 justify-center bg-white dark:bg-gray-900">
           <div data-theme="teal" className="mx-auto max-w-6xl">
             <h2 className="sr-only">Featured case study</h2>
-            <section className="font-sans text-black">
+            <section className="font-sans text-black dark:text-white">
               <div className="[ lg:flex lg:items-center ] [ fancy-corners fancy-corners--large fancy-corners--top-left fancy-corners--bottom-right ]">
                 <div className="flex-shrink-0 self-stretch sm:flex-basis-40 md:flex-basis-50 xl:flex-basis-60">
                   <div className="h-full">
                     <article className="h-full">
                       <div className="h-full">
-                        <img className="h-full object-cover transition-transform duration-300 ease-in-out transform hover:scale-90" src="/education.jpg" width="733" height="412" alt='""' typeof="foaf:img" />
+                        <img className="h-full object-cover transition-transform duration-300 ease-in-out transform hover:scale-90" src="/education.jpg" width="733" height="412" alt="education" />
                       </div>
                     </article>
                   </div>
                 </div>
-                <div className="p-3 bg-grey">
+                <div className="p-3 bg-gray-50 dark:bg-gray-800">
                   <div className="leading-relaxed">
                     <h2 className="leading-tight text-4xl ml-4 font-bold">
                       Education
@@ -200,14 +201,14 @@ const Home = () => {
 
         <div className="grid gap-8 md:grid-cols-3 md:p-5 mt-0">
           {skillsData.map((skill) => (
-            <div key={skill.name} className="flex flex-col space-y-4 transition-all duration-150 bg-white border border-indigo-100 rounded-lg shadow hover:shadow-xl lg:p-5 lg:flex-row lg:space-y-0 lg:space-x-6">
+            <div key={skill.name} className="flex flex-col space-y-4 transition-all duration-150 bg-white dark:bg-gray-800 border border-indigo-100 dark:border-gray-700 rounded-lg shadow hover:shadow-xl lg:p-5 lg:flex-row lg:space-y-0 lg:space-x-6">
               <div className="flex-1">
                 <div className="mb-7">
                   <div className="flex justify-between py-1">
                     <span className="text-lg text-gray-900 dark:text-[#A6A6A6] mb-3">
                       {skill.name}
                     </span>
-                    <span className="text-base font-semibold text-gray-900 pr-5 dark:text-[#A6A6A6]">
+                    <span className="text-base font-semibold text-gray-900 dark:text-[#A6A6A6] pr-5">
                       {skill.progress}%
                     </span>
                   </div>
@@ -235,8 +236,8 @@ const Home = () => {
       </div>
 
       {/* Projects Section */}
-      <div id="project" >
-        <div className="relative mt-24  text-center">
+      <div id="project">
+        <div className="relative mt-24 text-center">
           <p className="text-5xl inline-block relative group">
             My projects
             <span className="absolute left-0 h-1 bg-violet-700 w-0 group-hover:w-full transition-all duration-500 -bottom-2"></span>
@@ -244,36 +245,54 @@ const Home = () => {
         </div>
         <section className="container mx-auto p-5 md:p-20 antialiased">
           <article className="flex flex-wrap md:flex-nowrap shadow-lg mx-auto max-w-3xl group cursor-pointer rounded-md transform duration-500 hover:-translate-y-1">
-            <img className="max-h-[350px] object-cover md:w-96" src="/langNet.png" alt="" />
+            <img className="max-h-[350px] object-cover md:w-96" src="/langNet.png" alt="LangNet Project" />
             <div className="">
-              <div className="p-5 pb-20">
-                <h1 className="text-2xl font-semibold text-gray-800 mt-4">
+              <div className="p-5 pb-[75px]">
+                <h1 className="text-2xl font-semibold text-gray-800 mt-4 dark:text-white">
                   Multi-Languages Translation
                 </h1>
                 <p className="text-sm text-gray-400 mt-2 leading-relaxed">
-                  Developed a multi-language translation with feature including user register and login, role, permission, notifications, file upload, and download. The application enables users to upload the file by manually or upload in excel file and get it translated to different file such as JSON, XML and String make it easy for Project Leader and Developer to work on their project.
+                  Developed a multi-language translation with features including user register and login, role, permission, notifications, file upload, and download. The application enables users to upload the file manually or upload in excel file and get it translated to different files such as JSON, XML, and String, making it easy for Project Leader and Developer to work on their project.
                 </p>
               </div>
-              <a className="ml-[350px] sm:mt-0 py-2 px-5 md:py-3 md:px-4 bg-purple-700 hover:bg-purple-600 font-bold text-white md:text-lg rounded-lg shadow-md" href="https://langnet.info/" target="_blank">
+              <a className="block float-end mr-3 w-max py-2 px-5 md:py-3 md:px-4 bg-purple-700 hover:bg-purple-600 font-bold text-white md:text-lg rounded-lg shadow-md" href="https://langnet.info/" target="_blank">
                 Visit website
               </a>
             </div>
           </article>
         </section>
-        <section className="container mx-auto p-10 md:p-20 antialiased">
+        <section className="container mx-auto p-5 md:p-20 antialiased">
           <article className="flex flex-wrap md:flex-nowrap shadow-lg mx-auto max-w-3xl group cursor-pointer rounded-md transform duration-500 hover:-translate-y-1">
-            <img className="max-h-[350px] object-center md:w-72" src="/vgrow.png" alt="" />
+            <img className="max-h-[350px] object-center md:w-72" src="/vgrow.png" alt="VGROW Project" />
             <div className="">
-              <div className="p-5 pb-28">
-                <h1 className="text-2xl font-semibold text-gray-800 mt-4">
+              <div className="p-5 pb-[80px]">
+                <h1 className="text-2xl font-semibold text-gray-800 mt-4 dark:text-white">
                   Website Course study
                 </h1>
                 <p className="text-sm text-gray-400 mt-2 leading-relaxed">
-                  VGROW is a responsive webpage with dynamic content connect database phpAdmin with PHP that develop by my teams
+                  VGROW is a responsive webpage with dynamic content connected to a database using phpAdmin with PHP, developed by my team.
                 </p>
               </div>
-              <a className="ml-[340px] sm:mt-0 py-16 px-5 md:py-3 md:px-4 bg-purple-700 hover:bg-purple-600 font-bold text-white md:text-lg rounded-lg shadow-md" href="https://github.com/KosalSreyka/VGROWphp" target="_blank">
+              <a className="block float-right mr-3 w-max py-2 px-5 md:py-3 md:px-4 bg-purple-700 hover:bg-purple-600 font-bold text-white md:text-lg rounded-lg shadow-md" href="https://github.com/KosalSreyka/VGROWphp" target="_blank">
                 Github link
+              </a>
+            </div>
+          </article>
+        </section>
+        <section className="container mx-auto p-5 md:p-20 antialiased">
+          <article className="flex flex-wrap md:flex-nowrap shadow-lg mx-auto max-w-3xl group cursor-pointer rounded-md transform duration-500 hover:-translate-y-1">
+            <img className="max-h-[350px] object-cover md:w-96" src="/movie.png" alt="Movie Project" />
+            <div className="">
+              <div className="p-5  ">
+                <h1 className="text-2xl font-semibold text-gray-800 mt-4 dark:text-white">
+                  Movie Data Fetching
+                </h1>
+                <p className="text-sm text-gray-400 mt-2 leading-relaxed dark:text-gray-300">
+                  Developed a movie data fetching application using React.js and Next.js. The application fetches movie data from a public API and displays it in a user-friendly interface.
+                </p>
+              </div>
+              <a className="block float-end mr-3 w-max mb-3 px-2 md:py-3 md:px-4 bg-purple-700 hover:bg-purple-600 font-bold text-white md:text-lg rounded-lg shadow-md" href="https://web-homework-007-data-fetching.vercel.app" target="_blank">
+                Visit website
               </a>
             </div>
           </article>
@@ -281,14 +300,14 @@ const Home = () => {
       </div>
 
       {/* Footer */}
-      <div className="mt-8 bg-gray-900 pt-5">
+      <div className="mt-8  pt-5 shadow-lg" id="contact">
         <div className="mx-auto w-full max-w-[1166px] px-4 xl:px-0">
           <div className="flex flex-col justify-between sm:px-[18px] md:flex-row md:px-10">
             <div className="md:w-[316px] mt-10">
-              <h1 className="text-white font-extrabold mb-8 ml-5">
-                 Contact us via
+              <h1 className=" font-extrabold mb-8 ml-5">
+                Contact us via
               </h1>
-             
+
               <div className="mt-[18px] flex gap-4">
                 <a className="hover:scale-110" target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/sreyka.kosal?mibextid=ZbWKwL">
                   <img alt="facebook icon" width="36" height="36" src="/fb.svg" />
@@ -299,13 +318,12 @@ const Home = () => {
                 <a className="hover:scale-110" target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/sreykakosal?igsh=aHJkMTR0dzBvcHNi">
                   <img alt="instagram icon" width="36" height="36" src="/instagram.svg" />
                 </a>
-               
               </div>
             </div>
             <div className="md:w-[316px]">
               <div className="mt-[23px] flex">
-                <div className="flex h-[38px] w-[38px] items-center justify-center rounded-[75%]">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <div className="flex h-[38px]  w-[38px] items-center justify-center rounded-[75%]">
+                  <svg width="24" height="24"  viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M20.8472 14.8554L16.4306 12.8764L16.4184 12.8707C16.1892 12.7727 15.939 12.7333 15.6907 12.7562C15.4424 12.7792 15.2037 12.8636 14.9963 13.002C14.9718 13.0181 14.9484 13.0357 14.9259 13.0545L12.6441 14.9998C11.1984 14.2976 9.70595 12.8164 9.00376 11.3895L10.9519 9.07294C10.9706 9.0495 10.9884 9.02606 11.0053 9.00075C11.1407 8.79384 11.2229 8.55667 11.2445 8.31035C11.2661 8.06402 11.2264 7.81618 11.1291 7.58887V7.57762L9.14438 3.15356C9.0157 2.85662 8.79444 2.60926 8.51362 2.44841C8.2328 2.28756 7.9075 2.22184 7.58626 2.26106C6.31592 2.42822 5.14986 3.05209 4.30588 4.01615C3.4619 4.98021 2.99771 6.21852 3.00001 7.49981C3.00001 14.9436 9.05626 20.9998 16.5 20.9998C17.7813 21.0021 19.0196 20.5379 19.9837 19.6939C20.9477 18.85 21.5716 17.6839 21.7388 16.4136C21.7781 16.0924 21.7125 15.7672 21.5518 15.4864C21.3911 15.2056 21.144 14.9843 20.8472 14.8554ZM16.5 19.4998C13.3185 19.4963 10.2682 18.2309 8.01856 15.9813C5.76888 13.7316 4.50348 10.6813 4.50001 7.49981C4.49648 6.58433 4.82631 5.69887 5.42789 5.00879C6.02947 4.3187 6.86167 3.87118 7.76907 3.74981C7.7687 3.75355 7.7687 3.75732 7.76907 3.76106L9.73782 8.16731L7.80001 10.4867C7.78034 10.5093 7.76247 10.5335 7.74657 10.5589C7.60549 10.7754 7.52273 11.0246 7.5063 11.2825C7.48988 11.5404 7.54035 11.7981 7.65282 12.0307C8.5022 13.7679 10.2525 15.5051 12.0084 16.3536C12.2428 16.465 12.502 16.5137 12.7608 16.495C13.0196 16.4762 13.2692 16.3907 13.485 16.2467C13.5091 16.2305 13.5322 16.2129 13.5544 16.1942L15.8334 14.2498L20.2397 16.2232C20.2397 16.2232 20.2472 16.2232 20.25 16.2232C20.1301 17.1319 19.6833 17.9658 18.9931 18.5689C18.3028 19.172 17.4166 19.5029 16.5 19.4998Z"
                       fill="white"
@@ -313,9 +331,8 @@ const Home = () => {
                   </svg>
                 </div>
                 <div className="ml-[18px]">
-                  <p className="font-Inter text-[12px] font-medium text-white">Phone Number</p>
-                  <p className="font-Inter text-[14px] font-medium text-white"> +855 978766072</p>
-                  
+                  <p className="font-Inter text-[12px] font-medium ">Phone Number</p>
+                  <p className="font-Inter text-[14px] font-medium "> +855 978766072</p>
                 </div>
               </div>
               <div className="mt-[23px] flex">
@@ -328,11 +345,10 @@ const Home = () => {
                   </svg>
                 </div>
                 <div className="ml-[18px]">
-                  <p className="font-Inter text-[12px] font-medium text-[#fff]">Email</p>
-                  <a href="mailto:kosalsreyka3@gmail.com" className="font-Inter text-[14px] font-medium text-[#fff]">
+                  <p className="font-Inter text-[12px] font-medium ">Email</p>
+                  <a href="mailto:kosalsreyka3@gmail.com" className="font-Inter text-[14px] font-medium ">
                     kosalsreyka3@gmail.com
                   </a>
-                  
                 </div>
               </div>
               <div className="mt-[23px] flex">
@@ -345,43 +361,17 @@ const Home = () => {
                   </svg>
                 </div>
                 <div className="ml-[18px]">
-                  <p className="font-Inter text-[12px] font-medium text-white">Address</p>
-                  <a href="#" className="font-Inter text-[14px] font-medium text-[#fff]">
-                  Sangkat Stueng Mean Chey  , Khan Mean Chey Phnom Penh
+                  <p className="font-Inter text-[12px] font-medium ">Address</p>
+                  <a href="#" className="font-Inter text-[14px] font-medium ">
+                    Sangkat Stueng Mean Chey, Khan Mean Chey Phnom Penh
                   </a>
-                  
                 </div>
               </div>
             </div>
-            {/* <div className="mt-6 flex w-full flex-col justify-between text-white sm:flex-row md:mt-0 md:max-w-[341px]">
-              <div>
-                <p className="text-deutziawhite font-inter text-[18px] font-medium leading-normal">Pages</p>
-                <ul>
-                  <li className="mt-[15px]">
-                    <a className="text-deutziawhite hover:text-deutziawhite/80 font-inter text-[15px] font-normal hover:font-semibold">Home</a>
-                  </li>
-                  <li className="mt-[15px]">
-                    <a className="text-deutziawhite hover:text-deutziawhite/80 font-inter text-[15px] font-normal hover:font-semibold">News</a>
-                  </li>
-                  <li className="mt-[15px]">
-                    <a className="text-deutziawhite hover:text-deutziawhite/80 font-inter text-[15px] font-normal hover:font-semibold">Contact</a>
-                  </li>
-                  <li className="mt-[15px]">
-                    <a className="text-deutziawhite hover:text-deutziawhite/80 font-inter text-[15px] font-normal hover:font-semibold">Plans and pricing</a>
-                  </li>
-                  <li className="mt-[15px]">
-                    <a className="text-deutziawhite hover:text-deutziawhite/80 font-inter text-[15px] font-normal hover:font-semibold">Terms and conditions</a>
-                  </li>
-                  <li className="mt-[15px]">
-                    <a className="text-deutziawhite hover:text-deutziawhite/80 font-inter text-[15px] font-normal hover:font-semibold">Privacy policy</a>
-                  </li>
-                </ul>
-              </div>
-            </div> */}
           </div>
-          <hr className="mt-[30px] text-white" />
+          <hr className="mt-[30px] " />
           <div className="flex items-center justify-center pb-8 pt-[9px] md:py-8">
-            <p className="text-[10px] font-normal text-white md:text-[12px]">
+            <p className="text-[10px] font-normal  md:text-[12px]">
               © Copyright 2024, All Rights Reserved by me
             </p>
           </div>
